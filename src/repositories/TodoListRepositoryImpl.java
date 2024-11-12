@@ -2,7 +2,7 @@ package repositories;
 
 import entities.TodoList;
 
-public class TodoListRepositoryimpl implements TodoListRepository{
+public class TodoListRepositoryImpl implements TodoListRepository{
     public static TodoList[] todos = new TodoList[10];
 
     @Override
@@ -21,8 +21,8 @@ public class TodoListRepositoryimpl implements TodoListRepository{
                 break;
             }
         }
-
     }
+
     private static void resizeArrayIfFull() {
         // cek whether todos is full
         Boolean isFull = true;
@@ -53,7 +53,7 @@ public class TodoListRepositoryimpl implements TodoListRepository{
     }
 
     @Override
-    public Boolean remove(Integer number) {
+    public Boolean remove(final Integer number) {
         if (isSelectedTodoNotValid(number)) {
             return false;
         }

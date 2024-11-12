@@ -1,16 +1,14 @@
-
 package views;
 
 import entities.TodoList;
 import services.TodoListService;
-
 import java.util.Scanner;
 
 public class TodoListTerminalView implements TodoListView{
     public static Scanner scanner = new Scanner(System.in);
     private final TodoListService todoListService;
 
-    public TodoListTerminalView(TodoListService todoListService) {
+    public TodoListTerminalView(final TodoListService todoListService) {
         this.todoListService = todoListService;
     }
 
@@ -20,7 +18,6 @@ public class TodoListTerminalView implements TodoListView{
         return data;
     }
 
-
     public void showTodoList() {
         System.out.println("TODO LIST");
         TodoList[] todos = todoListService.getTodoList();
@@ -29,6 +26,48 @@ public class TodoListTerminalView implements TodoListView{
             if (todo != null) {
                 System.out.println((i + 1) + ". " + todo.getTodo());
             }
+        }
+    }
+
+    public void showMenuAddTodoList() {
+        System.out.println("MENAMBAH TODO LIST");
+        var todo = input("Todo (x jika batal)");
+        if (todo.equals("x")) {
+            // batal
+        } else {
+            todoListService.addTodoList(todo);
+        }
+    }
+
+
+    public void showMenuRemoveTodoList() {
+        System.out.println("MENGHAPUS TODO LIST");
+        var number = input("Nomor yang dihapus (x jika batal)");
+        if (number.equals("x")) {
+            //batal
+        } else {
+            boolean success = todoListService.removeTodoList(Integer.valueOf(number));
+            if (!success) {
+                System.out.println("Gagal menghapus todo list : " + number);
+            }
+        }
+    }
+
+    public void showMenuEditTodoList() {
+        System.out.println("MENGEDIT TODO LIST");
+        String selectedTodo = input("Masukkan nomor todo (x jika batal)");
+        if (selectedTodo.equals("x")) {
+            return;
+        }
+        String newTodo = input("Masukkan todo yang baru (x jika batal)");
+        if (newTodo.equals("x")) {
+            return;
+        }
+        boolean isEditTodoSuccess = todoListService.editTodoList(Integer.valueOf(selectedTodo), newTodo);
+        if (isEditTodoSuccess) {
+            System.out.println("Berhasil mengedit todo");
+        } else {
+            System.out.println("Gagal mengedit todo");
         }
     }
 
@@ -63,48 +102,6 @@ public class TodoListTerminalView implements TodoListView{
             }
         }
     }
-
-    public void showMenuAddTodoList() {
-        System.out.println("MENAMBAH TODO LIST");
-        var todo = input("Todo (x jika batal)");
-        if (todo.equals("x")) {
-            // batal
-        } else {
-            todoListService.addTodoList(todo);
-        }
-    }
-
-    public void showMenuRemoveTodoList() {
-        System.out.println("MENGHAPUS TODO LIST");
-        var number = input("Nomor yang dihapus (x jika batal)");
-        if (number.equals("x")) {
-            //batal
-        } else {
-            boolean success = todoListService.removeTodoList(Integer.valueOf(number));
-            if (!success) {
-                System.out.println("Gagal menghapus todo list : " + number);
-            }
-        }
-    }
-
-    public void showMenuEditTodoList() {
-        System.out.println("MENGEDIT TODO LIST");
-        String selectedTodo = input("Masukkan nomor todo (x jika batal)");
-        if (selectedTodo.equals("x")) {
-            return;
-        }
-        String newTodo = input("Masukkan todo yang baru (x jika batal)");
-        if (newTodo.equals("x")) {
-            return;
-        }
-        boolean isEditTodoSuccess = todoListservice.editTodoList(Integer.valueOf(selectedTodo), newTodo);
-        if (isEditTodoSuccess) {
-            System.out.println("Berhasil mengedit todo");
-        } else {
-            System.out.println("Gagal mengedit todo");
-        }
-    }
-
 
     @Override
     public void run() {

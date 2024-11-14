@@ -42,16 +42,28 @@ public class TodoListTerminalView implements TodoListView{
 
     public void showMenuRemoveTodoList() {
         System.out.println("MENGHAPUS TODO LIST");
-        var number = input("Nomor yang dihapus (x jika batal)");
+        var number = input("Masukkan ID todo yang dihapus (x jika batal)");
         if (number.equals("x")) {
-            //batal
-        } else {
-            boolean success = todoListService.removeTodoList(Integer.valueOf(number));
-            if (!success) {
-                System.out.println("Gagal menghapus todo list : " + number);
+            return; // batal
+        }
+
+        try {
+            // Mengkonversi nomor urut yang dimasukkan ke ID yang sesuai
+            int selectedTodoIndex = Integer.valueOf(number) - 1; // Menyesuaikan index array yang dimulai dari 0
+            if (selectedTodoIndex >= 0 && selectedTodoIndex < todoListService.getTodoList().length) {
+                boolean success = todoListService.removeTodoList(selectedTodoIndex);
+                if (!success) {
+                    System.out.println("Gagal menghapus todo list pada nomor : " + number);
+                }
+            } else {
+                System.out.println("Nomor yang dimasukkan tidak valid!");
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Input tidak valid! Harap masukkan ID todo yang valid (angka).");
         }
     }
+
+
 
     public void showMenuEditTodoList() {
         System.out.println("MENGEDIT TODO LIST");
